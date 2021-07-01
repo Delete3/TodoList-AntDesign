@@ -1,12 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Button } from "antd";
 import App from './App';
 import './index.css';
+import 'antd/dist/antd.min.css';
 
 const DATA = [
-  { id: "todo-0", name: "eat", completed: true },
-  { id: "todo-1", name: "sleep", completed: false },
-  { id: "todo-2", name: "repeat", completed: false },
+  { id: "task-0", name: "eat", completed: true },
+  { id: "task-1", name: "sleep", completed: false },
+  { id: "task-2", name: "repeat", completed: false },
 ]
 
 ReactDOM.render(

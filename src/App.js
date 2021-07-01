@@ -1,42 +1,87 @@
+import React, { useState } from "react";
+import { nanoid } from "nanoid";
+import { Button } from "antd";
 import Todo from "./components/Todo";
 import Form from "./components/Form";
+import FilterButton from "./components/FilterButton";
 
-function App(props) {
-  const taskList = props.tasks.map(task => 
+//宣告在App函式外避免一直重新處理
+const FILTER_MAP = {
+  All: () => true,
+  Active: (task) => !task.completed,
+  Completed: (task) => task.completed
+};
+
+const FILTER_NAMES = Object.keys(FILTER_MAP);
+
+export default function App(props) {
+  const [tasks, setTasks] = useState(props.tasks);
+  const [filter, setFilter] = useState('All');
+
+  const taskList = tasks
+  .filter(FILTER_MAP[filter])//會直接替換成指定陣列內元素的匿名函式
+  .map(task => 
     <Todo
       id={task.id}
       name={task.name} 
       completed={task.completed} 
       key={task.id}
+      toggleTaskCompleted={toggleTaskCompleted}
+      deleteTask={deleteTask}
+      editTask={editTask}
     /> 
   );
+
+  const filterList = FILTER_NAMES.map(name => 
+    <FilterButton 
+      key={name} 
+      name={name}
+      setFilter={setFilter}
+      isPressed={name === filter}
+    />
+  )
+
+  function addTask(name){
+    const newTask = {id: "task-" + nanoid(), name: name, completed: false};
+    setTasks([...tasks, newTask]);
+  }
+
+  function toggleTaskCompleted(id){
+    const updatedTasks = tasks.map(task => {
+      if(task.id === id)
+        return {...task, completed: !task.completed};
+      return task;
+    })
+    setTasks(updatedTasks);
+  }
+
+  function deleteTask(id){
+    const updateTasks = tasks.filter(task => task.id !== id);
+    setTasks(updateTasks);
+  }
+
+  function editTask(id, newName){
+    const updatedTasks = tasks.map(task => {
+      if(task.id === id)
+        return {...task, name: newName};
+      return task;
+    })
+    setTasks(updatedTasks);
+  }
+
+  const taskNumber = `${taskList.length} ${taskList.length > 1 ? 'tasks' : 'task'} remaining`;
 
   return (
     <div className="todoapp stack-large">
       <h1>TodoMatic</h1>
-      <Form />
+      <Form addTask={addTask} />
       <div className="filters btn-group stack-exception">
-        <button type="button" className="btn toggle-btn" aria-pressed="true">
-          <span className="visually-hidden">Show </span>
-          <span>all</span>
-          <span className="visually-hidden"> tasks</span>
-        </button>
-        <button type="button" className="btn toggle-btn" aria-pressed="false">
-          <span className="visually-hidden">Show </span>
-          <span>Active</span>
-          <span className="visually-hidden"> tasks</span>
-        </button>
-        <button type="button" className="btn toggle-btn" aria-pressed="false">
-          <span className="visually-hidden">Show </span>
-          <span>Completed</span>
-          <span className="visually-hidden"> tasks</span>
-        </button>
+        {filterList}
       </div>
       <h2 id="list-heading">
-        3 tasks remaining
+        {taskNumber}
       </h2>
       <ul
-        role="list"
         className="todo-list stack-large stack-exception"
         aria-labelledby="list-heading"
       >
@@ -45,5 +90,3 @@ function App(props) {
     </div>
   );
 }
-
-export default App;
