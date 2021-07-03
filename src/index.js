@@ -2,8 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Button } from "antd";
 import App from './App';
+//import 'antd/dist/antd.min.css';
 import './index.css';
-import 'antd/dist/antd.min.css';
 
 const DATA = [
   { id: "task-0", name: "eat", completed: true },
