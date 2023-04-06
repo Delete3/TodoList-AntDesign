@@ -13,9 +13,40 @@ const FILTER_MAP = {
 
 const FILTER_NAMES = Object.keys(FILTER_MAP);
 
-export default function App(props) {
+const App = (props) => {
   const [tasks, setTasks] = useState(props.tasks);
   const [filter, setFilter] = useState('All');
+
+  /** 
+   * @param {String} name
+   */
+  const addTask = (name) => {
+    const newTask = { id: "task-" + nanoid(), name: name, completed: false };
+    setTasks([...tasks, newTask]);
+  }
+
+  const toggleTaskCompleted = (id) => {
+    const updatedTasks = tasks.map(task => {
+      if (task.id === id)
+        return { ...task, completed: !task.completed };
+      return task;
+    })
+    setTasks(updatedTasks);
+  }
+
+  const deleteTask = (id) => {
+    const updateTasks = tasks.filter(task => task.id !== id);
+    setTasks(updateTasks);
+  }
+
+  const editTask = (id, newName) => {
+    const updatedTasks = tasks.map(task => {
+      if (task.id === id)
+        return { ...task, name: newName };
+      return task;
+    })
+    setTasks(updatedTasks);
+  }
 
   const taskList = tasks
     .filter(FILTER_MAP[filter])//會直接替換成指定陣列內元素的匿名函式
@@ -40,36 +71,6 @@ export default function App(props) {
     />
   )
 
-  function addTask(name) {
-    const newTask = { id: "task-" + nanoid(), name: name, completed: false };
-    setTasks([...tasks, newTask]);
-  }
-
-  function toggleTaskCompleted(id) {
-    const updatedTasks = tasks.map(task => {
-      if (task.id === id)
-        return { ...task, completed: !task.completed };
-      return task;
-    })
-    setTasks(updatedTasks);
-  }
-
-  function deleteTask(id) {
-    const updateTasks = tasks.filter(task => task.id !== id);
-    setTasks(updateTasks);
-  }
-
-  function editTask(id, newName) {
-    const updatedTasks = tasks.map(task => {
-      if (task.id === id)
-        return { ...task, name: newName };
-      return task;
-    })
-    setTasks(updatedTasks);
-  }
-
-  const taskNumber = `${taskList.length} ${taskList.length > 1 ? 'tasks' : 'task'} remaining`;
-
   return (
     <div className="todoapp stack-large">
       <h1>TodoMatic</h1>
@@ -78,7 +79,7 @@ export default function App(props) {
         {filterList}
       </div>
       <h2 id="list-heading">
-        {taskNumber}
+        {`${taskList.length} ${taskList.length > 1 ? 'tasks' : 'task'} remaining`}
       </h2>
       <ul
         className="todo-list stack-large stack-exception"
@@ -89,3 +90,5 @@ export default function App(props) {
     </div>
   );
 }
+
+export default App;
