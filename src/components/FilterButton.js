@@ -1,6 +1,6 @@
 import React from "react";
 
-function FilterButton(props) {
+const FilterButton = (props) => {
   return (
     <button 
       type="button" 

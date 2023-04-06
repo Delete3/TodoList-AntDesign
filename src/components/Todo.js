@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 
-function Todo(props) {
+const Todo = (props) => {
   const [isEditing, setEditing] = useState(false);
   const [newName, setNewName] = useState(props.name);
 
-  function handleSubmit(e) {
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (newName.trim() === "") {
       alert("名稱不能為空")

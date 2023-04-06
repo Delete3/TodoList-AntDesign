@@ -1,12 +1,11 @@
-import React, {useState} from "react";
-import {Button} from "antd";
+import React, { useState } from "react";
 
-function Form(props) {
+const Form = (props) => {
   const [name, setName] = useState('');
 
-  function handleSubmit(e){
+  const handleSubmit = (e) => {
     e.preventDefault();
-    if(name.trim() === ""){
+    if (name.trim() === "") {
       alert("名稱不能為空");
       return;
     }
@@ -27,11 +26,8 @@ function Form(props) {
         name="text"
         autoComplete="off"
         value={name}
-        onChange={(e)=>setName(e.target.value)}
+        onChange={(e) => setName(e.target.value)}
       />
-      <Button type="primary" htmlType="submit" className="btn btn__primary btn__lg">
-        Add
-      </Button>
       <button type="submit" className="btn btn__primary btn__lg">
         Add
       </button>
